@@ -3,13 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.wsoft.ptest1.model;
+package com.wsoft.ptest1.model.entities;
 
 import java.io.Serializable;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 /**
  *
@@ -24,6 +26,20 @@ public class Employee implements Serializable {
     private String name;
     private String fonction;
     private int age;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Organisation organisation;
+
+    public Organisation getOrganisation() {
+        return organisation;
+    }
+
+    public static Employee copy(Employee employee) {
+        return new Employee(employee.getName(), employee.getFonction(), employee.getAge());
+    }
+
+    public void setOrganisation(Organisation organisation) {
+        this.organisation = organisation;
+    }
 
     public Employee(String name, String fonction, int age) {
         this.name = name;

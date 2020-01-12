@@ -5,11 +5,15 @@
  */
 package com.wsoft.ptest1.repositories;
 
-import com.wsoft.ptest1.model.Employee;
+import com.wsoft.ptest1.model.entities.Employee;
+import com.wsoft.ptest1.model.entities.Organisation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 /**
@@ -17,9 +21,22 @@ import org.springframework.stereotype.Component;
  * @author b.walid
  */
 @Component
-public class EmployeesRepo {
+public class EmployeesRepo implements ApplicationRunner {
 
     private List<Employee> employees;
+    @Autowired
+    EmployeeRepository employeeRepository;
+    @Autowired
+    OrganisationRepository organisationRepository;
+
+    public void initEmployees() {
+        Organisation organisation = new Organisation("AEPS");
+        for (Employee employee : getEmployees()) {
+            employee.setOrganisation(organisation);
+        }
+        organisation.setEmployees(getEmployees());
+        organisationRepository.save(organisation);
+    }
 
     private List<Employee> camputeListEmployees() {
         employees = new ArrayList<>();
@@ -60,6 +77,11 @@ public class EmployeesRepo {
 
     public void setEmployees(List<Employee> employees) {
         this.employees = employees;
+    }
+
+    @Override
+    public void run(ApplicationArguments args) throws Exception {
+        initEmployees();
     }
 
 }

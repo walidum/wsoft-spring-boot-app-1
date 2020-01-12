@@ -5,7 +5,9 @@
  */
 package com.wsoft.ptest1.controllers;
 
-import com.wsoft.ptest1.model.Employee;
+import com.wsoft.ptest1.model.dtos.EmployeeDto;
+import com.wsoft.ptest1.model.dtos.OrganisationDto;
+import com.wsoft.ptest1.model.entities.Employee;
 import com.wsoft.ptest1.services.EmployeeService;
 import java.util.List;
 import javax.validation.Valid;
@@ -31,8 +33,13 @@ public class EmployeesController {
     }
 
     @GetMapping("/employees")
-    public List<Employee> employees() {
+    public List<EmployeeDto> employees() {
         return employeeService.getEmployees();
+    }
+
+    @GetMapping("/orgs")
+    public List<OrganisationDto> orgs() {
+        return employeeService.getOrgs();
     }
 
     @GetMapping("/findEmployees/{name}")

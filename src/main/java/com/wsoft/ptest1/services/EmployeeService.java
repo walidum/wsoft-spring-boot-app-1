@@ -5,9 +5,15 @@
  */
 package com.wsoft.ptest1.services;
 
-import com.wsoft.ptest1.model.Employee;
+import com.wsoft.ptest1.model.dtos.EmployeeDto;
+import com.wsoft.ptest1.model.dtos.OrganisationDto;
+import com.wsoft.ptest1.model.entities.Employee;
+import com.wsoft.ptest1.model.entities.Organisation;
+import com.wsoft.ptest1.repositories.EmployeeRepository;
 import com.wsoft.ptest1.repositories.EmployeesRepo;
+import com.wsoft.ptest1.repositories.OrganisationRepository;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +27,20 @@ public class EmployeeService {
     @Autowired
     EmployeesRepo employeesRepo;
 
-    public List<Employee> getEmployees() {
-        return employeesRepo.getEmployees();
+    @Autowired
+    OrganisationRepository organisationRepository;
+    @Autowired
+    EmployeeRepository employeeRepository;
+
+    public List<EmployeeDto> getEmployees() {
+        List<Employee> list = employeeRepository.findAll();
+        return list.stream().map(e -> new EmployeeDto(e)).collect(Collectors.toList());
+    }
+
+    public List<OrganisationDto> getOrgs() {
+        List<Organisation> list = organisationRepository.findAll();
+        List<OrganisationDto> toRturn = list.stream().map(o -> new OrganisationDto(o)).collect(Collectors.toList());
+        return toRturn;
     }
 
     public boolean addEmployee(Employee employee) {
